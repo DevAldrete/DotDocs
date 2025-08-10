@@ -12,6 +12,7 @@ import sqlite3
 import json
 
 
+
 @dataclass
 class StoredVector:
     id: str
@@ -55,6 +56,26 @@ class SqliteVectorStore:
                 for v in items
             ],
         )
+        self.conn.commit()
+
+    def all(self) -> List[StoredVector]:
+        cur = self.conn.cursor()
+        cur.execute("SELECT id, text, metadata, embedding FROM vectors")
+        rows = cur.fetchall()
+        return [StoredVector(id=r[0], text=r[1], meta=json.loads(r[2]), embedding=json.loads(r[3])) for r in rows]
+
+    def by_source(self, source_url: str) -> List[StoredVector]:
+        cur = self.conn.cursor()
+        cur.execute("SELECT id, text, metadata, embedding FROM vectors WHERE json_extract(metadata, '$.source_url') = ?", (source_url,))
+        rows = cur.fetchall()
+        return [StoredVector(id=r[0], text=r[1], meta=json.loads(r[2]), embedding=json.loads(r[3])) for r in rows]
+
+    def delete_ids(self, ids: Sequence[str]):
+        if not ids:
+            return
+        cur = self.conn.cursor()
+        qmarks = ",".join(["?"] * len(ids))
+        cur.execute(f"DELETE FROM vectors WHERE id IN ({qmarks})", list(ids))
         self.conn.commit()
 
     def fetch(self, ids: Sequence[str]) -> List[StoredVector]:

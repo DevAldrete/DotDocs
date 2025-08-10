@@ -5,6 +5,7 @@ from typing import List, Tuple
 import math
 import re
 
+
 from app.config.settings import get_settings
 from .embeddings import embed_texts
 from .vectorstore import SqliteVectorStore, StoredVector
