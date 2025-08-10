@@ -1,0 +1,77 @@
+Product Name: DotDocs
+Purpose: Retrieve, store, and explain specific snippets from any documentation/tutorial/manual link in a minimal, atomic, and context-rich way.
+
+1. Problem Statement
+Developers waste time hunting through long documentation and tutorials for small, specific pieces of information. DotDocs solves this by:
+Extracting only relevant atomic chunks.
+Adding short, understandable explanations.
+Making the retrieval process instant and context-aware.
+
+2. Goals
+MVP Goal: Given a link to documentation, retrieve specific, relevant snippets with explanations.
+Preserve original context and link to source.
+Build a searchable store of snippets.
+
+3. Scope
+In Scope (MVP):
+URL ingestion for HTML docs and Markdown tutorials.
+Automatic content parsing and chunking into atomic snippets.
+Local storage of chunks with embeddings for semantic search.
+Retrieval with snippet + short explanation + source link.
+Out of Scope (MVP, but future features):
+PDF parsing.
+Multi-link ingestion in one batch.
+Offline mode with full doc caching.
+Browser extension and CLI.
+
+4. User Stories
+As a developer, I want to paste a doc link and have the system automatically break it into small, searchable snippets so I can find what I need faster.
+As a learner, I want short explanations next to code snippets so I understand what’s happening without reading the whole doc.
+As a researcher, I want to search across multiple stored documents so I can reuse past knowledge.
+
+5. Functional Specs
+URL Ingestion Module
+Input: Valid doc/tutorial/manual URL.
+Process: Fetch → Clean → Parse → Chunk → Store.
+
+Chunking Engine
+Split into atomic “knowledge cards” with:
+  Title / Section Name
+  Code or text snippet
+  Short description
+  Original URL
+
+Search Engine
+Keyword & semantic search.
+Return best match snippet with explanation.
+
+Explanation Layer
+Use LLM to generate a 2–3 sentence explanation per snippet.
+
+6. Technical Requirements
+Node.js (TypeScript) or Python backend.
+Parsing libraries: BeautifulSoup (HTML), pdfplumber (PDF in later version).
+Vector database: ChromaDB or Pinecone.
+LLM API for explanations (OpenAI GPT-4o-mini for cost efficiency).
+Frontend: React + TailwindCSS (optional for MVP, CLI is enough).
+
+7. Success Metrics
+Retrieval accuracy: ≥ 85% relevant snippet matches.
+Explanation clarity: rated ≥ 4/5 by test users.
+Ingestion speed: < 5 seconds for a medium-sized doc page.
+
+8. Roadmap
+Phase 1 (MVP)
+ Single URL ingestion (HTML/Markdown).
+ Snippet chunking & storage with embeddings.
+ CLI retrieval command with explanations.
+
+Phase 2
+ Multiple document ingestion.
+ PDF support.
+ Web UI.
+
+Phase 3
+ Offline mode with full doc caching.
+ Browser extension.
+ Export snippets in multiple formats
